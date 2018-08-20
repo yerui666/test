@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=4,width=300">
+    <title>菜鸟教程(runoob.com)</title> 
+</head>
+<body>
+<p id="demo">点击按钮获取您当前坐标（可能需要比较长的时间获取）：</p>
+<button onclick="getLocation()">点我</button>
+<div id="mapholder"></div>
+<script>
+    var x=document.getElementById("demo");
+    function getLocation()
+    {
+        //判断浏览器支持
+        if(window.navigator.geolocation) {
+            //调用getCurrentPosition方法
+            window.navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
+            //注：options  为第三个参数 ，为可选参数
+            //var options = {enableHighAccuracy: true,timeout: 2000,maximumAge: 2000};
+        }else{
+            console.log("浏览器不支持html5来获取地理位置信息");
+        }
+
+    }
+    function handleSuccess(position){
+        //经纬度
+        alert("获取成功！");
+        var lng = position.coords.longitude;
+        var lat = position.coords.latitude;
+        var latlon=lng+","+lat;
+        //转化成百度经纬度
+        //在这里操作
+        var img_url="http://maps.googleapis.com/maps/api/staticmap?center="
+                +latlon+"&zoom=14&size=400x300&sensor=false";
+        document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
+    }
+    function handleError(error){
+        alert("获取失败");
+        var result;
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                result="请打开您的定位系统";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                result="暂时获取不到您的地点信息，请手动选择城市";
+                break;
+            case error.TIMEOUT:
+                result="连接超时";
+                break;
+            case error.UNKNOWN_ERROR:
+                result="发生了位置错误";
+                break;
+        }
+    }
+
+</script>
+</body>
+</html>
